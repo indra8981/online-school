@@ -5,8 +5,13 @@
   "proxy": "http://localhost:8080",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
+<<<<<<< HEAD
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+=======
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+>>>>>>> 2c7fef133940e6888276fffff4cb659b02a6d03a
     "express": "^4.17.1",
     "mongodb": "^3.6.1",
     "react": "^16.13.1",
@@ -15,6 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
+<<<<<<< HEAD
+=======
+    "dev": "nodemon ./server.js localhost 8080",
+>>>>>>> 2c7fef133940e6888276fffff4cb659b02a6d03a
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -33,8 +42,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
+=======
+>>>>>>> 2c7fef133940e6888276fffff4cb659b02a6d03a
   }
 }
