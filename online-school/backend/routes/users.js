@@ -7,13 +7,27 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/getbyemail').get(async (req, res) => {
-  const user = await User.findOne({"email" : req.body.email}).then(user => {
-    if(user===null)
+router.route('/getbyemail').get((req, res) => {
+  User.findOne({"email" : req.body.email}).then(user => {
+    if(user == null)
     throw "Not Found";
     res.json(user)})
   .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.route('/loginbyemail').post((req, res) => {
+  console.log(req.body);
+  User.findOne({"email" : req.body.email}).then(user => {
+    if(user == null)
+    throw "Not Found";
+    console.log(user)
+    const userStatus = { 
+      passwordMatch : (req.body.password == user.password)
+    }; 
+    res.json(userStatus)})
+  .catch(err => res.status(400).json('Error: ' + err));
+});
+
 
 router.route('/').patch(async (req, res) => {
   const filter = { email : req.body.email };

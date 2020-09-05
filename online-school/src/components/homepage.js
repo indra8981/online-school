@@ -7,7 +7,7 @@ export default class HomePage extends Component {
       <div>
         <h3>This is a School Management Site</h3>
         <button onClick={(e)=>{window.location="/register"}}>SignUp</button>
-        <button>Login</button>
+        <button onClick={(e)=>{window.location="/login"}}>Login</button>
       </div>
     )
   }
