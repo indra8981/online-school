@@ -7,9 +7,12 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/getbyemail').get((req, res) => {
-  const user = User.find().where("email" , req.body.email);
-  console.log(user);
+router.route('/getbyemail').get(async (req, res) => {
+  const user = await User.findOne({"email" : req.body.email}).then(user => {
+    if(users===null)
+    throw "Not Found";
+    res.json(user)})
+  .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/').patch(async (req, res) => {
