@@ -9,7 +9,7 @@ router.route('/').get((req, res) => {
 
 router.route('/getbyemail').get(async (req, res) => {
   const user = await User.findOne({"email" : req.body.email}).then(user => {
-    if(users===null)
+    if(user===null)
     throw "Not Found";
     res.json(user)})
   .catch(err => res.status(400).json('Error: ' + err));
