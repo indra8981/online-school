@@ -26,6 +26,9 @@ connection.once('open', () => {
 
 const usersRouter = require('./routes/users');
 app.use('/users', usersRouter);
+const classRoomsRouter = require('./routes/classrooms');
+app.use('/classrooms', classRoomsRouter);
+
 app.post('/api/authenticate', function(req, res) {
   const { email, password } = req.body;
   User.findOne({ email }, function(err, user) {
