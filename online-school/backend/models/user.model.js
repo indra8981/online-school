@@ -22,24 +22,24 @@ const userSchema = new Schema({
     trim: true,
   },
   name : {
-    type : String, 
+    type : String,
     required : true,
     trim : true,
   },
   phone : {
-    type : Number, 
+    type : Number,
     required : true,
     trim : true,
   },
   school : {
-    type : String, 
+    type : String,
     required : true,
     trim : true,
   },
   roll : {
-    type : String, 
+    type : String,
     trim : true,
-  } 
+  }
 }, {
   timestamps: true,
 });

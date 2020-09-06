@@ -1,8 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const withAuth = require('./middleware.js');
+const User = require('./models/user.model');
 
 require('dotenv').config();
+const secret = process.env.SECRET_JWT;
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -20,9 +25,41 @@ connection.once('open', () => {
 
 const usersRouter = require('./routes/users');
 app.use('/users', usersRouter);
-
-const logInRouter = require('./routes/login');
-app.use('/', logInRouter);
+app.post('/api/authenticate', function(req, res) {
+  const { email, password } = req.body;
+  console.log(req.body);
+  User.findOne({ email }, function(err, user) {
+    if (err) {
+      console.error(err);
+      res.status(500)
+        .json({
+        error: 'Internal error please try again'
+      });
+    } else if (!user) {
+      res.status(400)
+        .json({
+        error: 'Incorrect email or password'
+      });
+    } else {
+      if(user.password!==password){
+        res.status(400)
+          .json({
+          error: 'Incorrect email or password'
+        });
+      }else {
+        // Issue token
+        const payload = { email };
+        const token = jwt.sign(payload, secret, {
+          expiresIn: '1h'
+        });
+        res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+      }
+    }
+  });
+});
+app.get('/checkToken', withAuth, function(req, res) {
+  res.status(200).json(req.email);
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
