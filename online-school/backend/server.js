@@ -26,13 +26,9 @@ connection.once('open', () => {
 
 const usersRouter = require('./routes/users');
 app.use('/users', usersRouter);
-<<<<<<< HEAD
-
-const logInRouter = require('./routes/login');
-app.use('/', logInRouter);
 const classRoomsRouter = require('./routes/classrooms');
 app.use('/classrooms', classRoomsRouter);
-=======
+
 app.post('/api/authenticate', function(req, res) {
   const { email, password } = req.body;
   User.findOne({ email }, function(err, user) {
@@ -67,7 +63,6 @@ app.post('/api/authenticate', function(req, res) {
 app.get('/checkToken', withAuth, function(req, res) {
   res.status(200).json(req.email);
 });
->>>>>>> 45ffb2948baff9c973c3bc64149188cef12c651a
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
