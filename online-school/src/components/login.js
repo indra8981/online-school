@@ -36,16 +36,25 @@ export default class LogIn extends Component {
       email : this.state.email,
       password : this.state.password
     }
-
-    console.log(user);
-    axios.post('http://localhost:8080/users/loginbyemail', user)
-      .then(response => {
-        console.log(response);
-        if(response.data.passwordMatch)
-          window.location = '/dashboard';
-        else
-          alert('Please enter correct email and password');
-      });
+    fetch('/api/authenticate', {
+      method: 'POST',
+      body: JSON.stringify(this.state),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        this.props.history.push('/dashboard');
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error logging in please try again');
+    });
 
   }
 
@@ -54,7 +63,7 @@ export default class LogIn extends Component {
       <div>
         <h3>Login here</h3>
       <form onSubmit={this.onSubmit}>
-        <div className="form-group"> 
+        <div className="form-group">
           <label>Email: </label>
           <input  type="text"
             required
@@ -63,7 +72,7 @@ export default class LogIn extends Component {
             onChange={this.onChangeEmail}
           />
         </div>
-        <div className="form-group"> 
+        <div className="form-group">
           <label>Password: </label>
           <input  type="text"
             required
