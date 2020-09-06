@@ -23,6 +23,8 @@ app.use('/users', usersRouter);
 
 const logInRouter = require('./routes/login');
 app.use('/', logInRouter);
+const classRoomsRouter = require('./routes/classrooms');
+app.use('/classrooms', classRoomsRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
