@@ -14,6 +14,7 @@ const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
@@ -34,7 +35,6 @@ app.use('/classrooms', classRoomsRouter);
 =======
 app.post('/api/authenticate', function(req, res) {
   const { email, password } = req.body;
-  console.log(req.body);
   User.findOne({ email }, function(err, user) {
     if (err) {
       console.error(err);
@@ -59,7 +59,7 @@ app.post('/api/authenticate', function(req, res) {
         const token = jwt.sign(payload, secret, {
           expiresIn: '1h'
         });
-        res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+        res.cookie('token', token, { httpOnly: false }).sendStatus(200);
       }
     }
   });

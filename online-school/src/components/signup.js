@@ -30,7 +30,7 @@ export default class SignUp extends Component {
     axios.post("http://localhost:8080/users/add",this.state)
     .then(res => console.log(res.data))
     .catch(err => console.log(err));
-
+    this.props.history.push("/login");
   }
   render() {
     return (
