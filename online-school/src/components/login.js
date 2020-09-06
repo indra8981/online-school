@@ -36,22 +36,25 @@ export default class LogIn extends Component {
       email : this.state.email,
       password : this.state.password
     }
-
-    axios.post("http://localhost:8080/api/authenticate",user)
-    .then(res=>{window.location = '/dashboard';})
-    .catch(err=>alert('Please enter correct email and password'));
-
-
-    // axios.post('http://localhost:8080/users/loginbyemail', user)
-    //   .then(response => {
-    //     console.log(response);
-    //     axios.post("http://localhost:8080/api/authenticate",user).
-    //     .catch(err=>alert('Please enter correct email and password'));
-    //     if(response.data.passwordMatch)
-    //       window.location = '/dashboard';
-    //     else
-    //       alert('Please enter correct email and password');
-    //   });
+    fetch('/api/authenticate', {
+      method: 'POST',
+      body: JSON.stringify(this.state),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        this.props.history.push('/dashboard');
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error logging in please try again');
+    });
 
   }
 
