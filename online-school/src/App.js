@@ -6,6 +6,7 @@ import HomePage from "./components/homepage.js"
 import SignUp from "./components/signup.js";
 import Dashboard from './components/dashboard.js';
 import LogIn from './components/login.js';
+import CreateClassRoom  from './components/create-classroom.js';
 import withAuth from './components/withAuth.js';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/dashboard" exact component={withAuth(Dashboard)} />
         <Route path="/register" component={SignUp} />
         <Route path="/login" component={LogIn} />
+        <Route path="/create-classroom" component={withAuth(CreateClassRoom) } />
       </div>
     </Router>
   );
