@@ -60,8 +60,9 @@ app.post('/api/authenticate', function(req, res) {
     }
   });
 });
+
 app.get('/checkToken', withAuth, function(req, res) {
-  res.status(200).json(req.email);
+  res.status(200).json(res.email);
 });
 
 app.listen(port, () => {

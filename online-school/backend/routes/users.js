@@ -15,18 +15,6 @@ router.route('/getbyemail').get(async (req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/loginbyemail').post((req, res) => {
-  console.log(req.body);
-  User.findOne({"email" : req.body.email}).then(user => {
-    if(user == null)
-      throw "Not Found";
-    const userStatus = { 
-      passwordMatch : (req.body.password == user.password)
-    }; 
-    res.json(userStatus)})
-  .catch(err => res.status(400).json('Error: ' + err));
-});
-
 
 router.route('/').patch(async (req, res) => {
   const filter = { email : req.body.email };
@@ -59,7 +47,8 @@ router.route('/add').post((req, res) => {
     school,
     roll,
   });
-
+  
+  console.log(newUser);
   newUser.save()
     .then(() => res.json('User added!'))
     .catch(err => res.status(400).json('Error: ' + err));

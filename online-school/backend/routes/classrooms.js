@@ -1,21 +1,36 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const secret = process.env.SECRET_JWT;
 const router = require('express').Router();
 let ClassRoom = require('../models/classroom.model');
+var jwt_decode = require('jwt-decode');
+const fetch = require("node-fetch");
 
-router.route('/').post((req, res) => {
-  const creatorEmail = req.body.creatorEmail;
+function getCurrentLoggedInUserEmail(token){
+  var decoded = jwt_decode(token);
+  return decoded.email
+}
+
+router.route('/').get((req, res) => {
+  console.log(req.cookies);
+  const creatorEmail = getCurrentLoggedInUserEmail(req.cookies.token);
+  console.log(creatorEmail);
   ClassRoom.find({"creatorEmail" : creatorEmail})
     .then(classrooms => res.json(classrooms))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/create-classroom').post((req, res) => {
-  const creatorEmail = req.body.creatorEmail;
+  console.log(req.cookies);
+  const creatorEmail = getCurrentLoggedInUserEmail(req.body.token);
   const subjectName = req.body.subjectName;
-
+  console.log(creatorEmail);
+  console.log(subjectName);
   const newClassRoom = new ClassRoom({
     creatorEmail,
     subjectName
   });
+  console.log(newClassRoom);
 
   newClassRoom.save()
     .then(() => res.json('Classroom created!'))

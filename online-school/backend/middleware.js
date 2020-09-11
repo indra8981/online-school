@@ -3,12 +3,7 @@ require('dotenv').config();
 const secret = process.env.SECRET_JWT;
 
 const withAuth = function(req, res, next) {
-  const token =
-      req.body.token ||
-      req.query.token ||
-      req.headers['x-access-token'] ||
-      req.cookies.token;
-
+  const token = req.cookies.token;
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
   } else {
@@ -16,7 +11,7 @@ const withAuth = function(req, res, next) {
       if (err) {
         res.status(401).send('Unauthorized: Invalid token');
       } else {
-        req.email = decoded.email;
+        res.email = decoded.email;
         next();
       }
     });
