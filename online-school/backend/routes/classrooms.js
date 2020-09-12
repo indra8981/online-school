@@ -2,9 +2,7 @@ const router = require('express').Router();
 let ClassRoom = require('../models/classroom.model');
 
 router.route('/').get((req, res) => {
-  console.log(req.cookies);
-  const creatorEmail = getCurrentLoggedInUserEmail(req.cookies.token);
-  console.log(creatorEmail);
+  const creatorEmail = res.email;
   ClassRoom.find({"creatorEmail" : creatorEmail})
     .then(classrooms => res.json(classrooms))
     .catch(err => res.status(400).json('Error: ' + err));
