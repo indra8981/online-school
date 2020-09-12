@@ -29,7 +29,7 @@ export default class SignUp extends Component {
   handleSubmit(event) {
     event.preventDefault();
     console.log(this.state);
-    axios.post("http://localhost:8080/users/add", this.state)
+    axios.post("/users/add", this.state)
     .then(res => {
       console.log(res.data);
       this.props.history.push('/login');

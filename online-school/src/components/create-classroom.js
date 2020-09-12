@@ -25,11 +25,7 @@ export default class CreateClassRoom extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const cookies = new Cookies();
-    const curr = {
-      subjectName : this.state.subjectName,
-      token : cookies.get("token", {path: "/", domain: "localhost"})
-    }
-    axios.post("http://localhost:8080/classrooms/create-classroom", curr)
+    axios.post("/classrooms/create-classroom", this.state)
     .then(res => {
       console.log(res.data);
       this.props.history.push('/dashboard');

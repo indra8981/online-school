@@ -15,6 +15,7 @@ const port = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(withAuth);
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
@@ -64,6 +65,8 @@ app.post('/api/authenticate', function(req, res) {
 app.get('/checkToken', withAuth, function(req, res) {
   res.status(200).json(res.email);
 });
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
