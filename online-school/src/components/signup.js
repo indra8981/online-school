@@ -5,17 +5,18 @@ export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      userType:1,
-      name:'',
-      phone:'',
-      school:'',
-      roll:''
+      email : '',
+      password : '',
+      userType : 1,
+      name : '',
+      phone : '',
+      school : '',
+      roll : ''
     };
     this.myChangeHandler = this.myChangeHandler.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   myChangeHandler(event) {
     const target = event.target;
     const value = target.value;
@@ -24,14 +25,18 @@ export default class SignUp extends Component {
       [name]: value
     });
   }
+  
   handleSubmit(event) {
     event.preventDefault();
     console.log(this.state);
-    axios.post("http://localhost:8080/users/add",this.state)
-    .then(res => console.log(res.data))
+    axios.post("/users/add", this.state)
+    .then(res => {
+      console.log(res.data);
+      this.props.history.push('/login');
+    })
     .catch(err => console.log(err));
-    this.props.history.push("/login");
   }
+  
   render() {
     return (
       <div>
