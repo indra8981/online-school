@@ -1,7 +1,5 @@
 import React,{ Component, useState,useEffect} from 'react';
 import axios from 'axios';
-import {Cookies} from 'react-cookie';
-
 
 export default class CreateClassRoom extends Component {
   constructor(props) {
@@ -24,7 +22,6 @@ export default class CreateClassRoom extends Component {
   
   handleSubmit(event) {
     event.preventDefault();
-    const cookies = new Cookies();
     axios.post("/classrooms/create-classroom", this.state)
     .then(res => {
       console.log(res.data);

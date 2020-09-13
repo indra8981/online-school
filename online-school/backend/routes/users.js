@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const withAuth = require('../middleware');
 let User = require('../models/user.model');
 
 router.route('/').get((req, res) => {
@@ -29,7 +30,7 @@ router.route('/').patch(async (req, res) => {
 });
 
 
-router.route('/add').post((req, res) => {
+router.route('/add').post(withAuth, (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const userType = req.body.userType;
