@@ -3,7 +3,20 @@ import {Cookies} from 'react-cookie';
 import Cookies1 from 'js-cookie';
 
 export default class Dashboard extends Component {
-
+  constructor() {
+    super();
+    this.state = {
+      classrooms : []
+    };
+  }
+  async componentDidMount(){
+    console.log("Hey");
+    await fetch('/classrooms').then(response => response.json()).then(Classrooms => {
+      console.log(Classrooms);
+      this.setState({classrooms : Classrooms});
+    });
+    console.log(this.state);
+  }
   render() {
     return (
       <div>
@@ -18,6 +31,10 @@ export default class Dashboard extends Component {
           console.log(Cookies1.get('token'));
           window.location="/create-classroom"
         }}>Create classroom</button>
+
+        <div>
+          {JSON.stringify(this.state.classrooms)}
+        </div>
       </div>
     )
   }

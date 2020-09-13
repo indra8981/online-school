@@ -15,7 +15,37 @@ const port = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.use(withAuth);
+app.post('/api/authenticate', function(req, res) {
+  const { email, password } = req.body;
+  User.findOne({ email }, function(err, user) {
+    if (err) {
+      console.error(err);
+      res.status(500)
+        .json({
+        error: 'Internal error please try again'
+      });
+    } else if (!user) {
+      res.status(400)
+        .json({
+        error: 'Incorrect email or password'
+      });
+    } else {
+      if(user.password!==password){
+        res.status(400)
+          .json({
+          error: 'Incorrect email or password'
+        });
+      }else {
+        // Issue token
+        const payload = { email };
+        const token = jwt.sign(payload, secret, {
+          expiresIn: '1h'
+        });
+        res.cookie('token', token, { httpOnly: false }).sendStatus(200);
+      }
+    }
+  });
+});
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true }
@@ -61,6 +91,7 @@ app.post('/api/authenticate', function(req, res) {
     }
   });
 });
+
 
 app.get('/checkToken', withAuth, function(req, res) {
   res.status(200).json(res.email);

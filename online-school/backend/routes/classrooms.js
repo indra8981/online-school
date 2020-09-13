@@ -1,14 +1,19 @@
 const router = require('express').Router();
+const withAuth = require('../middleware');
 let ClassRoom = require('../models/classroom.model');
 
-router.route('/').get((req, res) => {
+router.route('/').get(withAuth, (req, res) => {
   const creatorEmail = res.email;
+  console.log(creatorEmail);
   ClassRoom.find({"creatorEmail" : creatorEmail})
-    .then(classrooms => res.json(classrooms))
+    .then(classrooms => {
+      res.json(classrooms)
+      console.log(classrooms);
+    })
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/create-classroom').post((req, res) => {
+router.route('/create-classroom').post(withAuth, (req, res) => {
   const creatorEmail = res.email;
   const subjectName = req.body.subjectName;
   const newClassRoom = new ClassRoom({
@@ -17,11 +22,11 @@ router.route('/create-classroom').post((req, res) => {
   });
   console.log(newClassRoom);
   newClassRoom.save()
-    .then(() => res.json('Classroom created!'))
+    .then(() => res.json(newClassRoom))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/classroom').post((req, res) => {
+router.route('/classroom').post(withAuth, (req, res) => {
   const _id = req.body._id;
   ClassRoom.findOne({"_id" : _id})
     .then(classroom => {
