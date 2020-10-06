@@ -30,7 +30,7 @@ router.route('/').patch(async (req, res) => {
 });
 
 
-router.route('/add').post(withAuth, (req, res) => {
+router.route('/add').post((req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const userType = req.body.userType;
