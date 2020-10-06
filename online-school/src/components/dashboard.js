@@ -10,12 +10,17 @@ export default class Dashboard extends Component {
     };
   }
   async componentDidMount(){
-    console.log("Hey");
     await fetch('/classrooms').then(response => response.json()).then(Classrooms => {
-      console.log(Classrooms);
       this.setState({classrooms : Classrooms});
     });
-    console.log(this.state);
+  }
+  classRoomList(){
+    const classrooms = this.state.classrooms.map((classroom)=>{
+      return (<div>
+      <a href={`/classroom/${classroom._id}`}>{classroom.subjectName}</a>
+      </div>)
+    });
+    return classrooms;
   }
   render() {
     return (
@@ -26,14 +31,14 @@ export default class Dashboard extends Component {
           cookies.remove("token", {path: "/", domain: "localhost"});
           this.props.history.push("/");
         }}>Logout</button>
-        
+
         <button onClick={(e)=>{
           console.log(Cookies1.get('token'));
           window.location="/create-classroom"
         }}>Create classroom</button>
 
         <div>
-          {JSON.stringify(this.state.classrooms)}
+          {this.classRoomList()}
         </div>
       </div>
     )

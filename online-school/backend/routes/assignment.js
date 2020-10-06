@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require('multer');
+const withAuth = require('../middleware');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -31,7 +32,8 @@ const upload = multer({
 
 const Assignment = require("../models/assignment.model.js");
 
-router.get("/", (req, res, next) => {
+router.get("/:classroomId/", (req, res, next) => {
+
   Assignment.find()
     .select("name _id assignmentImage")
     .exec()
