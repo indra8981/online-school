@@ -31,31 +31,29 @@ const upload = multer({
 });
 
 const Assignment = require("../models/assignment.model.js");
+const ClassRoom =require("../models/classroom.model.js");
 
-router.get("/:classroomId/", (req, res, next) => {
-
-  Assignment.find()
+router.get("/:classroomId/", withAuth,async (req, res) => {
+  const classroomId=req.params.classroomId;
+  const creatorEmail=await ClassRoom.find({"_id":classroomId}).select("creatorEmail");
+  if(res.email!=creatorEmail[0]["creatorEmail"])
+  return res.sendStatus(404);
+  Assignment.find({"classroomId":classroomId})
     .select("name _id assignmentImage")
     .exec()
     .then(docs => {
       const response = {
-        count: docs.length,
-        products: docs.map(doc => {
+        assignments: docs.map(doc => {
           return {
             name: doc.name,
             assignmentImage: doc.assignmentImage,
-            _id: doc._id,
-            request: {
-              type: "GET",
-              url: "http://localhost:3000/products/" + doc._id
-            }
+            _id: doc._id
           };
         })
       };
       res.status(200).json(response);
     })
     .catch(err => {
-      console.log(err);
       res.status(500).json({
         error: err
       });
@@ -66,6 +64,7 @@ router.post("/", upload.single('assignmentImage'), (req, res, next) => {
   const assignment = new Assignment({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
+    classroomId:req.body.classroomId,
     assignmentImage: req.file.path
   });
   assignment
