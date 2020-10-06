@@ -13,6 +13,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "filepond": "^4.20.1",
+    "filepond-plugin-image-exif-orientation": "^1.0.9",
+    "filepond-plugin-image-preview": "^4.6.4",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.1",
@@ -20,6 +23,7 @@
     "react": "^16.13.1",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-filepond": "^7.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "universal-cookie": "^4.0.3"

@@ -54,12 +54,14 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
+app.use('/uploads', express.static('uploads'));
 
 const usersRouter = require('./routes/users');
 app.use('/users', usersRouter);
 const classRoomsRouter = require('./routes/classrooms');
 app.use('/classrooms', classRoomsRouter);
-
+const assignmentRouter = require('./routes/assignment');
+app.use("/assignment", assignmentRouter);
 app.post('/api/authenticate', function(req, res) {
   const { email, password } = req.body;
   User.findOne({ email }, function(err, user) {
