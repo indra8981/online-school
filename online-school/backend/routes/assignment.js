@@ -62,11 +62,14 @@ router.get("/:classroomId/", (req, res, next) => {
     });
 });
 
-router.post("/", upload.single('assignmentImage'), (req, res, next) => {
+router.post("/", upload.single('assignmentImage'), (req, res, next) => {   
+  console.log(req.body);                                                         
   const assignment = new Assignment({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    assignmentImage: req.file.path
+    classRoomId : req.body.classRoomId,
+    assignmentTitle: req.body.assignmentTitle,
+    maximumMarks : req.body.maximumMarks, 
+    assignmentImage: req.file.path,
+    date : req.body.date
   });
   assignment
     .save()

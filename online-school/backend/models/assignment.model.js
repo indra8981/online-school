@@ -1,13 +1,31 @@
 const mongoose = require('mongoose');
 
 const assignmentSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    name: { type: String },
-    classroomId:{
-      type:String,
-      required:true,
-    },
-    assignmentImage: { type: String, required: true }
+  classRoomId:{
+    type: String,
+    required:true,
+  },
+  assignmentTitle: { 
+    type: String, 
+    required:true,
+  },
+  maximumMarks: {
+    type : Number, 
+    required:true,
+  },
+  assignmentImage: {
+    type: String, 
+    required: true 
+  },
+  date: { 
+    type: Date, 
+    required: true 
+  },
+},{
+  timestamps: true,
 });
 
-module.exports = mongoose.model('Assignment', assignmentSchema);
+const Assignment = mongoose.model('Assignment', assignmentSchema);
+
+module.exports = Assignment;
+
