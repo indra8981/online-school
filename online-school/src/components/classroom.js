@@ -6,21 +6,23 @@ export default class Classroom extends Component {
   constructor() {
     super();
     this.state = {
-      classrooms : []
+      assignments : []
     };
   }
   async componentDidMount(){
-    await fetch('/classrooms').then(response => response.json()).then(Classrooms => {
-      this.setState({classrooms : Classrooms});
+    let classRoomId = this.props.match.params.classRoomId;
+    await fetch(`/assignment/${classRoomId}`).then(response => response.json()).then(Assignments => {
+      this.setState({assignments : Assignments.assignments });
     });
+    console.log(this.state);
   }
-  classRoomList(){
-    const classrooms = this.state.classrooms.map((classroom)=>{
+  assignmentList(){
+    const assignments = this.state.assignments.map((assignment)=>{
       return (<div>
-      <a href={`/classroom/${classroom._id}`}>{classroom.subjectName}</a>
+      <a href={`/assignment/${assignment._id}`}>{assignment.assignmentTitle}</a>
       </div>)
     });
-    return classrooms;
+    return assignments;
   }
   render() {
     return (
@@ -33,13 +35,14 @@ export default class Classroom extends Component {
         }}>Logout</button>
 
         <button onClick={(e)=>{
-          console.log(Cookies1.get('token'));
-          window.location="/create-classroom"
-        }}>Create classroom</button>
+          let classRoomId = this.props.match.params.classRoomId;
+          this.props.history.push(`/create-assignment/${classRoomId}/`);
+        }}>Create new assignment</button>
 
         <div>
-          {this.classRoomList()}
+          {this.assignmentList()}
         </div>
+        
       </div>
     )
   }

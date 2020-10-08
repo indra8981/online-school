@@ -7,9 +7,7 @@ export default class CreateAssignment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      assignmentTitle : ' ',
       date: new Date(),
-      maximumMarks : 0,
       formdt:new FormData()
     };
     this.onChangeDate = this.onChangeDate.bind(this);
@@ -49,15 +47,15 @@ export default class CreateAssignment extends Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit() {
     let classRoomId = this.props.match.params.classRoomId;
     let prev = this.state.formdt;
     prev.append('date', this.state.date);
     prev.append('classRoomId', classRoomId);
+    console.log(prev);
     fetch("http://localhost:8080/assignment/", {
       method: 'POST',
-      body: this.state.formdt
+      body: prev
     })
     .then(res => {
       console.log(res.data);
