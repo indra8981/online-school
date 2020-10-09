@@ -11,7 +11,7 @@ export default class Classroom extends Component {
   }
   async componentDidMount(){
     let classRoomId = this.props.match.params.classRoomId;
-    await fetch(`/assignment/${classRoomId}`).then(response => response.json()).then(Assignments => {
+    await fetch(`/assignment/getAll/${classRoomId}`).then(response => response.json()).then(Assignments => {
       this.setState({assignments : Assignments.assignments });
     });
     console.log(this.state);

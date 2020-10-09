@@ -33,7 +33,7 @@ const upload = multer({
 const Assignment = require("../models/assignment.model.js");
 const ClassRoom =require("../models/classroom.model.js");
 
-router.get("/:classRoomId/", withAuth,async (req, res) => {
+router.get("/getAll/:classRoomId/", withAuth,async (req, res) => {
   const classroomId=req.params.classRoomId;
   const creatorEmail=await ClassRoom.find({"_id":classroomId}).select("creatorEmail");
   if(res.email!=creatorEmail[0]["creatorEmail"])
@@ -97,12 +97,12 @@ router.post("/", upload.single('assignmentImage'), (req, res, next) => {
 router.get("/:assignmentId", (req, res, next) => {
   const id = req.params.assignmentId;
   Assignment.findById(id)
-    .select('name _id assignmentImage')
+
     .exec()
     .then(doc => {
       if (doc) {
         res.status(200).json({
-            product: doc,
+            assignment: doc,
             request: {
                 type: 'GET',
                 url: 'http://localhost:3000/products'
