@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const withAuth = require('../middleware');
 let ClassRoom = require('../models/classroom.model');
+let StudentAdd = require('../models/classroomStudent.model');
 
 router.route('/').get(withAuth, (req, res) => {
   const creatorEmail = res.email;
-  console.log(creatorEmail);
   ClassRoom.find({"creatorEmail" : creatorEmail})
     .then(classrooms => {
       res.json(classrooms)
@@ -34,6 +34,24 @@ router.route('/classroom').post(withAuth, (req, res) => {
         throw "Not Found";
       res.json(classroom)})
     .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/addStudents/:classRoomId').post(withAuth, (req, res) => {
+  console.log(req.body);
+  var emailsList = req.body.emailsList.split(",");
+  var classRoomId = req.params.classRoomId;
+  console.log(classRoomId);
+  console.log(emailsList)
+  emailsList.forEach(studentEmail => {
+    const newStudentAdd = new StudentAdd({
+      classRoomId,
+      studentEmail
+    });
+    console.log(newStudentAdd);
+    newStudentAdd.save()
+      .then(() => res.json(newStudentAdd))
+      .catch(err => res.status(400).json('Error: ' + err));
+  });
 });
 
 router.route(`/`)

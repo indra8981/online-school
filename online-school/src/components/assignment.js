@@ -1,6 +1,5 @@
 import React,{ Component, useState,useEffect} from 'react';
 import {Cookies} from 'react-cookie';
-import Cookies1 from 'js-cookie';
 
 export default class Assignment extends Component {
   constructor() {
@@ -19,11 +18,12 @@ export default class Assignment extends Component {
   }
   assignmentList(){
     return (<div>
-        <h1>{this.state.assignmentTitle}</h1>
+        <h1>{this.state.assignment.assignmentTitle}</h1>
         <p>Maximum Marks : {this.state.assignment.maximumMarks}</p>
         <p>Deadline : {this.state.assignment.date}</p>
-        <a href={`http://localhost:8080/${this.state.assignment.assignmentImage}`}>Download Assignment</a>
-        </div>)
+        <a href={`http://localhost:8080/${this.state.assignment.assignmentImage}` } target="_blank" > Download Assignment</a>
+        </div>
+    )
   }
   render() {
     return (
