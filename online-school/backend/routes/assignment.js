@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require('multer');
+const withAuth = require('../middleware');
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -30,41 +31,44 @@ const upload = multer({
 });
 
 const Assignment = require("../models/assignment.model.js");
+const ClassRoom =require("../models/classroom.model.js");
 
-router.get("/", (req, res, next) => {
-  Assignment.find()
-    .select("name _id assignmentImage")
+router.get("/getAll/:classRoomId/", withAuth,async (req, res) => {
+  const classroomId=req.params.classRoomId;
+  const creatorEmail=await ClassRoom.find({"_id":classroomId}).select("creatorEmail");
+  if(res.email!=creatorEmail[0]["creatorEmail"])
+  return res.sendStatus(404);
+  Assignment.find({"classRoomId":classroomId})
+    .select("assignmentTitle maximumMarks")
     .exec()
     .then(docs => {
+      console.log(docs);
       const response = {
-        count: docs.length,
-        products: docs.map(doc => {
+        assignments: docs.map(doc => {
           return {
-            name: doc.name,
-            assignmentImage: doc.assignmentImage,
-            _id: doc._id,
-            request: {
-              type: "GET",
-              url: "http://localhost:3000/products/" + doc._id
-            }
+            assignmentTitle : doc.assignmentTitle,
+            maximumMarks : doc.maximumMarks,
+            _id : doc._id
           };
         })
       };
       res.status(200).json(response);
     })
     .catch(err => {
-      console.log(err);
       res.status(500).json({
         error: err
       });
     });
 });
 
-router.post("/", upload.single('assignmentImage'), (req, res, next) => {
+router.post("/", upload.single('assignmentImage'), (req, res, next) => {   
+  console.log(req.body);                                                         
   const assignment = new Assignment({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    assignmentImage: req.file.path
+    classRoomId : req.body.classRoomId,
+    assignmentTitle: req.body.assignmentTitle,
+    maximumMarks : req.body.maximumMarks, 
+    assignmentImage: req.file.path,
+    date : req.body.date
   });
   assignment
     .save()
@@ -93,12 +97,12 @@ router.post("/", upload.single('assignmentImage'), (req, res, next) => {
 router.get("/:assignmentId", (req, res, next) => {
   const id = req.params.assignmentId;
   Assignment.findById(id)
-    .select('name _id assignmentImage')
+
     .exec()
     .then(doc => {
       if (doc) {
         res.status(200).json({
-            product: doc,
+            assignment: doc,
             request: {
                 type: 'GET',
                 url: 'http://localhost:3000/products'
