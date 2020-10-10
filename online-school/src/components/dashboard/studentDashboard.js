@@ -27,7 +27,7 @@ export default class StudentDashboard extends Component {
     return classrooms;
   }
   render() {
-    const {email,type} = this.props;
+    const { email, type } = this.props;
     return (
       <div>
         <h3>Welcome to our website</h3>
