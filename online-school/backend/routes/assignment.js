@@ -36,15 +36,16 @@ const upload = multer({
 
 const Assignment = require("../models/assignment.model.js");
 const ClassRoom = require("../models/classroom.model.js");
+const StudentAdd = require("../models/classroomStudent.model.js");
 
-router.get("/getAll/:classRoomId/", withAuth, async (req, res) => {
+router.get("/getAllForTeacher/:classRoomId/", withAuth, async (req, res) => {
   const classroomId = req.params.classRoomId;
   const creatorEmail = await ClassRoom.find({ _id: classroomId }).select(
     "creatorEmail"
   );
   if (res.email != creatorEmail[0]["creatorEmail"]) return res.sendStatus(404);
   Assignment.find({ classRoomId: classroomId })
-    .select("assignmentTitle maximumMarks")
+    .select("assignmentTitle")
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -52,7 +53,38 @@ router.get("/getAll/:classRoomId/", withAuth, async (req, res) => {
         assignments: docs.map((doc) => {
           return {
             assignmentTitle: doc.assignmentTitle,
-            maximumMarks: doc.maximumMarks,
+            _id: doc._id,
+          };
+        }),
+      };
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
+
+router.get("/getAllForStudent/:classRoomId/", withAuth, async (req, res) => {
+  const classroomId = req.params.classRoomId;
+  const studentAccess = await StudentAdd.findOne({
+    classRoomId: classroomId,
+    studentEmail: res.email,
+  });
+  console.log(studentAccess);
+  if (studentAccess === null)
+    return res.sendStatus(404).send("Not assigned in this classroom");
+  console.log("Jaa raha hai ki nahi");
+  Assignment.find({ classRoomId: classroomId })
+    .select("assignmentTitle")
+    .exec()
+    .then((docs) => {
+      console.log(docs);
+      const response = {
+        assignments: docs.map((doc) => {
+          return {
+            assignmentTitle: doc.assignmentTitle,
             _id: doc._id,
           };
         }),

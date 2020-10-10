@@ -4,15 +4,23 @@ const Schema = mongoose.Schema;
 
 const StudentAddSchema = new Schema(
   {
-    classRoomId: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     studentEmail: {
       type: String,
       required: true,
       trim: true,
+      unique: true,
+    },
+    classRoomId: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
+    subjectName: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
     },
   },
   {
