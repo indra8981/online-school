@@ -37,7 +37,7 @@ app.post('/api/authenticate', function(req, res) {
         });
       }else {
         // Issue token
-        const payload = { email };
+        const payload = { "type":user.userType,"email":email };
         const token = jwt.sign(payload, secret, {
           expiresIn: '1h'
         });
@@ -62,41 +62,10 @@ const classRoomsRouter = require('./routes/classrooms');
 app.use('/classrooms', classRoomsRouter);
 const assignmentRouter = require('./routes/assignment');
 app.use("/assignment", assignmentRouter);
-app.post('/api/authenticate', function(req, res) {
-  const { email, password } = req.body;
-  User.findOne({ email }, function(err, user) {
-    if (err) {
-      console.error(err);
-      res.status(500)
-        .json({
-        error: 'Internal error please try again'
-      });
-    } else if (!user) {
-      res.status(400)
-        .json({
-        error: 'Incorrect email or password'
-      });
-    } else {
-      if(user.password!==password){
-        res.status(400)
-          .json({
-          error: 'Incorrect email or password'
-        });
-      }else {
-        // Issue token
-        const payload = { email };
-        const token = jwt.sign(payload, secret, {
-          expiresIn: '1h'
-        });
-        res.cookie('token', token, { httpOnly: false }).sendStatus(200);
-      }
-    }
-  });
-});
 
 
 app.get('/checkToken', withAuth, function(req, res) {
-  res.status(200).json(res.email);
+  res.status(200).json({"email":res.email,"type":res.type});
 });
 
 

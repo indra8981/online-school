@@ -1,21 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component,useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
 export default function withAuth(ComponentToProtect) {
   return class extends Component {
+    // const [email,setemail]=useState("");
+    // const [type,settype]=useState("");
     constructor() {
       super();
       this.state = {
         loading: true,
         redirect: false,
+        email:"",
+        type:null,
       };
     }
 
     componentDidMount() {
       fetch('/checkToken')
-        .then(res => {
+        .then(async res => {
+          const resp= await res.json();
           if (res.status === 200) {
-            this.setState({ loading: false });
+            this.setState({ loading: false,email:resp.email,type:resp.type });
           } else {
             const error = new Error(res.error);
             throw error;
@@ -36,7 +41,7 @@ export default function withAuth(ComponentToProtect) {
       if (redirect) {
         return <Redirect to="/login" />;
       }
-      return <ComponentToProtect {...this.props} />;
+      return <ComponentToProtect email={this.state.email} type={this.state.type} {...this.props} />;
     }
   }
 }

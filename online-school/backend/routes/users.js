@@ -48,7 +48,7 @@ router.route('/add').post((req, res) => {
     school,
     roll,
   });
-  
+
   console.log(newUser);
   newUser.save()
     .then(() => res.json('User added!'))
