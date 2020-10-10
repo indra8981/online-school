@@ -30,7 +30,7 @@ router.route('/').patch(async (req, res) => {
 });
 
 
-router.route('/add').post(withAuth, (req, res) => {
+router.route('/add').post( (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const userType = req.body.userType;
@@ -48,7 +48,7 @@ router.route('/add').post(withAuth, (req, res) => {
     school,
     roll,
   });
-  
+
   console.log(newUser);
   newUser.save()
     .then(() => res.json('User added!'))
