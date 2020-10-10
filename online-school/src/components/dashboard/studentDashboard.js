@@ -10,17 +10,20 @@ export default class StudentDashboard extends Component {
     };
   }
   async componentDidMount() {
-    await fetch("/classrooms")
+    await fetch("/classrooms/student")
       .then((response) => response.json())
       .then((Classrooms) => {
         this.setState({ classrooms: Classrooms });
       });
+    console.log(this.state);
   }
   classRoomList() {
     const classrooms = this.state.classrooms.map((classroom) => {
       return (
         <div>
-          <a href={`/classroom/${classroom._id}`}>{classroom.subjectName}</a>
+          <a href={`/classroom/${classroom.classRoomId}`}>
+            {classroom.subjectName}
+          </a>
         </div>
       );
     });

@@ -10,7 +10,7 @@ export default class TeacherDashboard extends Component {
     };
   }
   async componentDidMount() {
-    await fetch("/classrooms")
+    await fetch("/classrooms/teacher")
       .then((response) => response.json())
       .then((Classrooms) => {
         this.setState({ classrooms: Classrooms });
