@@ -1,11 +1,11 @@
-import React,{ Component, useState,useEffect} from 'react';
-import axios from 'axios';
+import React, { Component, useState, useEffect } from "react";
+import axios from "axios";
 
 export default class CreateClassRoom extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subjectName : ''
+      subjectName: "",
     };
     this.myChangeHandler = this.myChangeHandler.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,36 +16,35 @@ export default class CreateClassRoom extends Component {
     const value = target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
-  
+
   handleSubmit(event) {
     event.preventDefault();
-    axios.post("/classrooms/create-classroom", this.state)
-    .then(res => {
-      console.log(res.data);
-      this.props.history.push('/dashboard');
-    })
-    .catch(err => console.log(err));
+    axios
+      .post("/classrooms/create-classroom", this.state)
+      .then((res) => {
+        console.log(res.data);
+        this.props.history.push("/dashboard");
+      })
+      .catch((err) => console.log(err));
   }
 
   render() {
     return (
       <div>
-      <form onSubmit={this.handleSubmit}>
-      <p>Subject name:</p>
-      <input
-        type='text'
-        name='subjectName'
-        onChange={this.myChangeHandler}
-      />
-      <p></p>
-      <input type="submit" value="Submit" />
-      </form>
-
+        <form onSubmit={this.handleSubmit}>
+          <p>Subject name:</p>
+          <input
+            type="text"
+            name="subjectName"
+            onChange={this.myChangeHandler}
+          />
+          <p></p>
+          <input type="submit" value="Submit" />
+        </form>
       </div>
-    )
+    );
   }
-  
 }

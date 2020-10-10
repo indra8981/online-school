@@ -1,21 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const multer = require('multer');
-const withAuth = require('../middleware');
+const multer = require("multer");
+const withAuth = require("../middleware");
 
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads/');
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, new Date().toISOString() + file.originalname);
-  }
+  },
 });
 
 const fileFilter = (req, file, cb) => {
   // reject a file
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf') {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "application/pdf"
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -25,71 +29,72 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5
+    fileSize: 1024 * 1024 * 5,
   },
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });
 
 const Assignment = require("../models/assignment.model.js");
-const ClassRoom =require("../models/classroom.model.js");
+const ClassRoom = require("../models/classroom.model.js");
 
-router.get("/getAll/:classRoomId/", withAuth,async (req, res) => {
-  const classroomId=req.params.classRoomId;
-  const creatorEmail=await ClassRoom.find({"_id":classroomId}).select("creatorEmail");
-  if(res.email!=creatorEmail[0]["creatorEmail"])
-  return res.sendStatus(404);
-  Assignment.find({"classRoomId":classroomId})
+router.get("/getAll/:classRoomId/", withAuth, async (req, res) => {
+  const classroomId = req.params.classRoomId;
+  const creatorEmail = await ClassRoom.find({ _id: classroomId }).select(
+    "creatorEmail"
+  );
+  if (res.email != creatorEmail[0]["creatorEmail"]) return res.sendStatus(404);
+  Assignment.find({ classRoomId: classroomId })
     .select("assignmentTitle maximumMarks")
     .exec()
-    .then(docs => {
+    .then((docs) => {
       console.log(docs);
       const response = {
-        assignments: docs.map(doc => {
+        assignments: docs.map((doc) => {
           return {
-            assignmentTitle : doc.assignmentTitle,
-            maximumMarks : doc.maximumMarks,
-            _id : doc._id
+            assignmentTitle: doc.assignmentTitle,
+            maximumMarks: doc.maximumMarks,
+            _id: doc._id,
           };
-        })
+        }),
       };
       res.status(200).json(response);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({
-        error: err
+        error: err,
       });
     });
 });
 
-router.post("/", upload.single('assignmentImage'), (req, res, next) => {   
-  console.log(req.body);                                                         
+router.post("/", upload.single("assignmentImage"), (req, res, next) => {
+  console.log(req.body);
   const assignment = new Assignment({
-    classRoomId : req.body.classRoomId,
+    classRoomId: req.body.classRoomId,
     assignmentTitle: req.body.assignmentTitle,
-    maximumMarks : req.body.maximumMarks, 
+    maximumMarks: req.body.maximumMarks,
     assignmentImage: req.file.path,
-    date : req.body.date
+    date: req.body.date,
   });
   assignment
     .save()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       res.status(201).json({
         message: "Created assignment successfully",
         createdAssignment: {
-            name: result.name,
-            _id: result._id,
-            request: {
-                type: 'GET',
-                url: "http://localhost:3000/assignment/" + result._id
-            }
-        }
+          name: result.name,
+          _id: result._id,
+          request: {
+            type: "GET",
+            url: "http://localhost:3000/assignment/" + result._id,
+          },
+        },
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
-        error: err
+        error: err,
       });
     });
 });
@@ -99,14 +104,14 @@ router.get("/:assignmentId", (req, res, next) => {
   Assignment.findById(id)
 
     .exec()
-    .then(doc => {
+    .then((doc) => {
       if (doc) {
         res.status(200).json({
-            assignment: doc,
-            request: {
-                type: 'GET',
-                url: 'http://localhost:3000/products'
-            }
+          assignment: doc,
+          request: {
+            type: "GET",
+            url: "http://localhost:3000/products",
+          },
         });
       } else {
         res
@@ -114,7 +119,7 @@ router.get("/:assignmentId", (req, res, next) => {
           .json({ message: "No valid entry found for provided ID" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({ error: err });
     });
@@ -128,19 +133,19 @@ router.patch("/:assignmentId", (req, res, next) => {
   }
   Assignment.update({ _id: id }, { $set: updateOps })
     .exec()
-    .then(result => {
+    .then((result) => {
       res.status(200).json({
-          message: 'Assignment updated',
-          request: {
-              type: 'GET',
-              url: 'http://localhost:3000/assignment/' + id
-          }
+        message: "Assignment updated",
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/assignment/" + id,
+        },
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
-        error: err
+        error: err,
       });
     });
 });
