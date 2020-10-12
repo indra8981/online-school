@@ -68,13 +68,18 @@ router.get("/getAllForTeacher/:classRoomId/", withAuth, async (req, res) => {
 
 router.get("/getAllForStudent/:classRoomId/", withAuth, async (req, res) => {
   const classroomId = req.params.classRoomId;
-  const studentAccess = await StudentAdd.findOne({
-    classRoomId: classroomId,
-    studentEmail: res.email,
-  });
-  console.log(studentAccess);
-  if (studentAccess === null)
-    return res.sendStatus(404).send("Not assigned in this classroom");
+  console.log(res.email);
+  const query = await StudentAdd.find({ classRoomId: classroomId, studentEmail : res.email})
+    .then((classrooms) => {
+      return classrooms;
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+  console.log(query.length);
+  if (query.length === 0){
+    console.log("Hola");
+    res.status(404).json(query);
+    return;
+  }
   console.log("Jaa raha hai ki nahi");
   Assignment.find({ classRoomId: classroomId })
     .select("assignmentTitle")

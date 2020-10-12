@@ -29,5 +29,5 @@ const StudentAddSchema = new Schema(
 );
 
 const StudentAdd = mongoose.model("StudentAdd", StudentAddSchema);
-
+StudentAddSchema.index({classRoomId: 1, studentEmail: 1});
 module.exports = StudentAdd;
