@@ -1,36 +1,33 @@
-const router = require('express').Router();
-const withAuth = require('../middleware');
-let User = require('../models/user.model');
+const router = require("express").Router();
+const withAuth = require("../middleware");
+let User = require("../models/user.model");
 
-router.route('/').get((req, res) => {
+router.route("/").get((req, res) => {
   User.find()
-    .then(users => res.json(users))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .then((users) => res.json(users))
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route('/getbyemail').get(async (req, res) => {
-  User.findOne({"email" : req.body.email}).then(user => {
-    if(user == null)
-      throw "Not Found";
-    res.json(user)})
-  .catch(err => res.status(400).json('Error: ' + err));
+router.route("/getbyemail").get(async (req, res) => {
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (user == null) throw "Not Found";
+      res.json(user);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
-
-router.route('/').patch(async (req, res) => {
-  const filter = { email : req.body.email };
+router.route("/").patch(async (req, res) => {
+  const filter = { email: req.body.email };
   const update = req.body;
   let doc = await User.findOneAndUpdate(filter, update, {
     new: true,
   });
-  if(doc == null)
-    res.status(400).json('Error');
-  else
-    res.status(200).json(doc);
+  if (doc == null) res.status(400).json("Error");
+  else res.status(200).json(doc);
 });
 
-
-router.route('/add').post( (req, res) => {
+router.route("/add").post((req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const userType = req.body.userType;
@@ -50,11 +47,12 @@ router.route('/add').post( (req, res) => {
   });
 
   console.log(newUser);
-  newUser.save()
-    .then(() => res.json('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+  newUser
+    .save()
+    .then(() => res.json("User added!"))
+    .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route(`/`)
+router.route(`/`);
 
 module.exports = router;
