@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const StudentAddSchema = new Schema(
+const AssignmentSubmitSchema = new Schema(
   {
     studentEmail: {
       type: String,
@@ -10,16 +10,20 @@ const StudentAddSchema = new Schema(
       trim: true,
       unique: true,
     },
-    classRoomId: {
+    assignmentId: {
       type: String,
       required: true,
       trim: true,
       unique: true,
     },
-    subjectName: {
+    assignmentImage: {
       type: String,
       required: true,
-      trim: true,
+    },
+    marksScored: {
+      type: Number,
+      required: true,
+      default: -1,
     },
   },
   {
@@ -27,5 +31,8 @@ const StudentAddSchema = new Schema(
   }
 );
 
-const StudentAdd = mongoose.model("StudentAdd", StudentAddSchema);
-module.exports = StudentAdd;
+const AssignmentSubmit = mongoose.model(
+  "AssignmentSubmit",
+  AssignmentSubmitSchema
+);
+module.exports = AssignmentSubmit;

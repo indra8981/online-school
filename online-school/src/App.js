@@ -10,7 +10,6 @@ import CreateAssignment from "./components/create-assignment.js";
 import withAuth from "./components/withAuth.js";
 import Classroom from "./components/classroom";
 import Assignment from "./components/assignment";
-
 function App() {
   return (
     <Router>

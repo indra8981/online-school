@@ -3,6 +3,9 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require("multer");
 const withAuth = require("../middleware");
+const fs = require("fs");
+const { promisify } = require("util");
+const unlinkAsync = promisify(fs.unlink);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -69,13 +72,16 @@ router.get("/getAllForTeacher/:classRoomId/", withAuth, async (req, res) => {
 router.get("/getAllForStudent/:classRoomId/", withAuth, async (req, res) => {
   const classroomId = req.params.classRoomId;
   console.log(res.email);
-  const query = await StudentAdd.find({ classRoomId: classroomId, studentEmail : res.email})
+  const query = await StudentAdd.find({
+    classRoomId: classroomId,
+    studentEmail: res.email,
+  })
     .then((classrooms) => {
       return classrooms;
     })
     .catch((err) => res.status(400).json("Error: " + err));
   console.log(query.length);
-  if (query.length === 0){
+  if (query.length === 0) {
     console.log("Hola");
     res.status(404).json(query);
     return;
@@ -139,7 +145,6 @@ router.post("/", upload.single("assignmentImage"), (req, res, next) => {
 router.get("/:assignmentId", (req, res, next) => {
   const id = req.params.assignmentId;
   Assignment.findById(id)
-
     .exec()
     .then((doc) => {
       if (doc) {
@@ -162,8 +167,11 @@ router.get("/:assignmentId", (req, res, next) => {
     });
 });
 
-router.patch("/:assignmentId", (req, res, next) => {
+router.patch("/:assignmentId", async (req, res, next) => {
   const id = req.params.assignmentId;
+  const fileName = "./uploads/2020-10-07T18:14:12.248ZCS605A_Assignment_20.pdf";
+  await unlinkAsync(fileName);
+
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;

@@ -18,7 +18,7 @@ export default class StudentClassRoom extends Component {
     await fetch(`/assignment/getAllForStudent/${classRoomId}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Not found");
+          throw new Error("Not found Habi Jabi");
         }
         return response;
       })

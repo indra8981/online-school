@@ -58,6 +58,8 @@ const classRoomsRouter = require("./routes/classrooms");
 app.use("/classrooms", classRoomsRouter);
 const assignmentRouter = require("./routes/assignment");
 app.use("/assignment", assignmentRouter);
+const assignmentSubmitRouter = require("./routes/assignment-submit");
+app.use("/assignment-submit", assignmentSubmitRouter);
 
 app.get("/checkToken", withAuth, function (req, res) {
   res.status(200).json({ email: res.email, type: res.type });

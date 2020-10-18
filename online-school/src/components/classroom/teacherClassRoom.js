@@ -51,6 +51,7 @@ export default class TeacherClassRoom extends Component {
       })
       .then((response) => response.json())
       .then((Assignments) => {
+        console.log(Assignments);
         this.setState({ assignments: Assignments.assignments });
       })
       .catch((err) => {
