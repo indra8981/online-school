@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import "antd/dist/antd.css";
+import { Modal, Button, Form, Input, Checkbox } from "antd";
+import "../styles/login.css";
 
 export default class LogIn extends Component {
   constructor(props) {
@@ -10,10 +13,31 @@ export default class LogIn extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
+      visible: false,
       email: "",
       password: "",
     };
   }
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
 
   onChangeEmail(e) {
     this.setState({
@@ -56,35 +80,87 @@ export default class LogIn extends Component {
   }
 
   render() {
+    const layout = {
+      labelCol: {
+        span: 8,
+      },
+      wrapperCol: {
+        span: 16,
+      },
+    };
+    const tailLayout = {
+      wrapperCol: {
+        offset: 8,
+        span: 16,
+      },
+    };
+
+    const onFinish = (values) => {
+      console.log("Success:", values);
+    };
+
+    const onFinishFailed = (errorInfo) => {
+      console.log("Failed:", errorInfo);
+    };
+
     return (
       <div>
-        <h3>Login here</h3>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Email: </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.email}
-              onChange={this.onChangeEmail}
-            />
-          </div>
-          <div className="form-group">
-            <label>Password: </label>
-            <input
-              type="text"
-              required
-              className="form-control"
-              value={this.state.password}
-              onChange={this.onChangePassword}
-            />
-          </div>
+        <Button type="primary" onClick={this.showModal}>
+          Login
+        </Button>
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          footer={null}
+          onCancel={this.handleCancel}
+          className={"loginModalCSS"}
+        >
+          <Form
+            {...layout}
+            name="basic"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+          >
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your username!",
+                },
+              ]}
+            >
+              <Input value={this.state.email} onChange={this.onChangeEmail} />
+            </Form.Item>
 
-          <div className="form-group">
-            <input type="submit" value="Login" className="btn btn-primary" />
-          </div>
-        </form>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password
+                value={this.state.password}
+                onChange={this.onChangePassword}
+              />
+            </Form.Item>
+
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit" onClick={this.onSubmit}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     );
   }
