@@ -1,12 +1,14 @@
 import React, { Component, useState, useEffect } from "react";
+import { Button } from "antd";
 import LogInModal from "./login";
-import { Button, } from "antd";
+import SignUpModal from "./signup";
+
 export default class HomePage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       loginvisible: false,
-      signupvisible:false
+      signupvisible: false,
     };
   }
   showModalLogin = () => {
@@ -23,22 +25,25 @@ export default class HomePage extends Component {
     return (
       <div>
         <h3>This is a School Management Site</h3>
-        <Button type="primary" onClick={this.showModalSignUp}>
-          Sign Up
-        </Button>
-        <button
-          onClick={(e) => {
-            window.location = "/register";
-          }}
-        >
-          SignUp
-        </button>
         <Button type="primary" onClick={this.showModalLogin}>
           Login
         </Button>
+        <Button type="primary" onClick={this.showModalSignUp}>
+          SignUp
+        </Button>
         <LogInModal
           visible={this.state.loginvisible}
-          handleCancel={()=>{this.setState({loginvisible:false})}}
+          handleCancel={() => {
+            this.setState({ loginvisible: false });
+          }}
+          {...this.props}
+        />
+
+        <SignUpModal
+          visible={this.state.signupvisible}
+          handleCancel={() => {
+            this.setState({ signupvisible: false });
+          }}
           {...this.props}
         />
       </div>

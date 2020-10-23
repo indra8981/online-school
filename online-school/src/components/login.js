@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import "antd/dist/antd.css";
 import { Modal, Button, Form, Input, Checkbox } from "antd";
-import "../styles/login.css";
+import "../styles/homepage.css";
 
-export default class LogIn extends Component {
+export default class LogInModal extends Component {
   constructor(props) {
     super(props);
 
@@ -17,20 +17,6 @@ export default class LogIn extends Component {
       password: "",
     };
   }
-
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
 
   onChangeEmail(e) {
     this.setState({
@@ -96,58 +82,55 @@ export default class LogIn extends Component {
       console.log("Failed:", errorInfo);
     };
     return (
-        <Modal
-          title="Login !!"
-          visible={this.props.visible}
-          footer={null}
-          onCancel={this.props.handleCancel}
-          className={"loginModalCSS"}
+      <Modal
+        title="Login !!"
+        visible={this.props.visible}
+        footer={null}
+        onCancel={this.props.handleCancel}
+      >
+        <Form
+          {...layout}
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Form
-            {...layout}
-            name="basic"
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+          <Form.Item
+            label="Email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
           >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
-            >
-              <Input value={this.state.email} onChange={this.onChangeEmail} />
-            </Form.Item>
+            <Input value={this.state.email} onChange={this.onChangeEmail} />
+          </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password!",
-                },
-              ]}
-            >
-              <Input.Password
-                value={this.state.password}
-                onChange={this.onChangePassword}
-              />
-            </Form.Item>
+          <Form.Item
+            label="Password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password
+              value={this.state.password}
+              onChange={this.onChangePassword}
+            />
+          </Form.Item>
 
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit" onClick={this.onSubmit}>
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+          <Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit" onClick={this.onSubmit}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     );
   }
 }
