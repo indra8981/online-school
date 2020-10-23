@@ -13,17 +13,10 @@ export default class LogIn extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      visible: false,
       email: "",
       password: "",
     };
   }
-
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
 
   handleOk = (e) => {
     console.log(e);
@@ -102,18 +95,12 @@ export default class LogIn extends Component {
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
-
     return (
-      <div>
-        <Button type="primary" onClick={this.showModal}>
-          Login
-        </Button>
         <Modal
-          title="Basic Modal"
-          visible={this.state.visible}
-          onOk={this.handleOk}
+          title="Login !!"
+          visible={this.props.visible}
           footer={null}
-          onCancel={this.handleCancel}
+          onCancel={this.props.handleCancel}
           className={"loginModalCSS"}
         >
           <Form
@@ -161,7 +148,6 @@ export default class LogIn extends Component {
             </Form.Item>
           </Form>
         </Modal>
-      </div>
     );
   }
 }
