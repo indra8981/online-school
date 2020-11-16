@@ -1,12 +1,13 @@
 import React, { Component, useState, useEffect } from "react";
-import { Cookies } from "react-cookie";
-import Cookies1 from "js-cookie";
+import CreateClassRoom from "../create-classroom";
+import { Button } from "antd";
 
 export default class TeacherDashboard extends Component {
   constructor() {
     super();
     this.state = {
       classrooms: [],
+      createClassroomVisible: false,
     };
   }
   async componentDidMount() {
@@ -26,29 +27,31 @@ export default class TeacherDashboard extends Component {
     });
     return classrooms;
   }
+  showModalCreateClassroom = () => {
+    this.setState({
+      createClassroomVisible: true,
+    });
+  };
   render() {
     return (
       <div>
-        <h3>Welcome to our website</h3>
-        <button
-          onClick={() => {
-            const cookies = new Cookies();
-            cookies.remove("token", { path: "/", domain: "localhost" });
-            this.props.history.push("/");
+        <div
+          style={{
+            paddingLeft: "40%",
           }}
         >
-          Logout
-        </button>
+          <Button type="primary" onClick={this.showModalCreateClassroom}>
+            Create Classroom
+          </Button>
+        </div>
 
-        <button
-          onClick={(e) => {
-            console.log(Cookies1.get("token"));
-            window.location = "/create-classroom";
+        <CreateClassRoom
+          visible={this.state.createClassroomVisible}
+          handleCancel={() => {
+            this.setState({ createClassroomVisible: false });
           }}
-        >
-          Create classroom
-        </button>
-
+          {...this.props}
+        />
         <div>{this.classRoomList()}</div>
       </div>
     );

@@ -8,10 +8,12 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/getbyemail").get(async (req, res) => {
-  User.findOne({ email: req.body.email })
+router.route("/getbyemail").get(withAuth, async (req, res) => {
+  console.log(res.email);
+  User.findOne({ email: res.email })
     .then((user) => {
       if (user == null) throw "Not Found";
+
       res.json(user);
     })
     .catch((err) => res.status(400).json("Error: " + err));

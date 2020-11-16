@@ -15,7 +15,18 @@ router.route("/teacher").get(withAuth, (req, res) => {
 
 router.route("/student").get(withAuth, (req, res) => {
   const studentEmail = res.email;
-  StudentAdd.find({ studentEmail: studentEmail })
+  StudentAdd.aggregate([
+    { $match: { studentEmail: studentEmail } },
+    { $addFields: { classroom_id: { $toObjectId: "$classRoomId" } } },
+    {
+      $lookup: {
+        from: "classrooms",
+        localField: "classroom_id",
+        foreignField: "_id",
+        as: "classroomsDetails",
+      },
+    },
+  ])
     .then((classrooms) => {
       res.json(classrooms);
       console.log(classrooms);
@@ -25,10 +36,14 @@ router.route("/student").get(withAuth, (req, res) => {
 
 router.route("/create-classroom").post(withAuth, (req, res) => {
   const creatorEmail = res.email;
+  const subjectCode = req.body.subjectCode;
   const subjectName = req.body.subjectName;
+  const academicYear = req.body.academicYear;
   const newClassRoom = new ClassRoom({
     creatorEmail,
+    subjectCode,
     subjectName,
+    academicYear,
   });
   console.log(newClassRoom);
   newClassRoom
@@ -50,16 +65,12 @@ router.route("/:classRoomId").get(withAuth, (req, res) => {
 router.route("/addStudents/:classRoomId").post(withAuth, (req, res) => {
   console.log(req.body);
   var emailsList = req.body.emailsList.split(",");
-  var subjectName = req.body.subjectName;
   var classRoomId = req.params.classRoomId;
-  console.log(classRoomId);
-  console.log(emailsList);
-  console.log(subjectName);
-  emailsList.forEach((studentEmail) => {
+  emailsList.forEach((email) => {
+    var studentEmail = email.trim();
     const newStudentAdd = new StudentAdd({
-      classRoomId,
       studentEmail,
-      subjectName,
+      classRoomId,
     });
     console.log(newStudentAdd);
     newStudentAdd

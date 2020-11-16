@@ -19,7 +19,7 @@ const userSchema = new Schema(
     },
     userType: {
       type: Number,
-      require: true,
+      required: true,
       trim: true,
     },
     name: {

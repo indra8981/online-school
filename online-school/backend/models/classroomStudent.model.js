@@ -16,11 +16,6 @@ const StudentAddSchema = new Schema(
       trim: true,
       unique: true,
     },
-    subjectName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
   },
   {
     timestamps: true,
