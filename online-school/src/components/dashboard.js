@@ -12,7 +12,7 @@ export default class Dashboard extends Component {
     const { email, type } = this.props;
     return (
       <div>
-        <Navbar isLoggedIn {...this.props} />
+        <Navbar isLoggedIn onBack={null} {...this.props} />
         {type === 1 ? (
           <TeacherDashboard {...this.props} />
         ) : (

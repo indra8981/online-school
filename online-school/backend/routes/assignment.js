@@ -82,11 +82,9 @@ router.get("/getAllForStudent/:classRoomId/", withAuth, async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
   console.log(query.length);
   if (query.length === 0) {
-    console.log("Hola");
     res.status(404).json(query);
     return;
   }
-  console.log("Jaa raha hai ki nahi");
   Assignment.find({ classRoomId: classroomId })
     .select("assignmentTitle")
     .exec()

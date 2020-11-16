@@ -13,12 +13,11 @@ export default class StudentClassRoom extends Component {
   }
 
   async componentDidMount() {
-    console.log("Ghusa nahi hai?");
     let classRoomId = this.props.match.params.classRoomId;
     await fetch(`/assignment/getAllForStudent/${classRoomId}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Not found Habi Jabi");
+          throw new Error("Error");
         }
         return response;
       })

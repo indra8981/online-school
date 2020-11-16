@@ -91,8 +91,12 @@ export default class SignUpModal extends Component {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item label="Select Student of Teacher" name="userType">
-              <Select defaultValue={1} style={{ width: 120 }}>
+            <Form.Item
+              label="Select Student or Teacher"
+              name="userType"
+              onValuesChange={onValuesChange}
+            >
+              <Select style={{ width: 120 }}>
                 <Option value={1}>Teacher</Option>
                 <Option value={2}>Student</Option>
               </Select>
